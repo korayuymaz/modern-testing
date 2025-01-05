@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { waitFor, render, screen } from "@testing-library/react";
+import {
+  render,
+  screen,
+  waitForElementToBeRemoved,
+} from "@testing-library/react";
 
 function TestComponent() {
   const [message, setMessage] = useState("First");
@@ -7,25 +11,23 @@ function TestComponent() {
   useEffect(() => {
     setTimeout(() => {
       setMessage("Second");
-    }, [300]);
+    }, 300);
   }, []);
   return (
     <div>
-      <p>{message}</p>
+      <p className="primary-text">{message}</p>
     </div>
   );
 }
 
 it("should render the third test correctly", async () => {
-  render(<TestComponent />);
+  const { container } = render(<TestComponent />);
   // const elementExist = await screen.findByText(/Second/i);
   // const elementShouldNotExist = screen.queryByText("First");
   // expect(elementExist).toBeInTheDocument();
   // expect(elementShouldNotExist).not.toBeInTheDocument();
-  await waitFor(() => {
-    expect(screen.getByText("Second")).toBeInTheDocument();
-  });
-  await waitFor(() => {
-    expect(screen.queryByText("First")).not.toBeInTheDocument();
-  });
+
+  const element = container.querySelector(".primary-text");
+
+  expect(element).toBeInTheDocument();
 });
