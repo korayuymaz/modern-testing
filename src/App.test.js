@@ -1,33 +1,31 @@
-import React, { useState, useEffect } from "react";
-import {
-  render,
-  screen,
-  waitForElementToBeRemoved,
-} from "@testing-library/react";
+import React, { useState } from "react";
+import userEvent from "@testing-library/user-event";
+import { render, screen } from "@testing-library/react";
 
 function TestComponent() {
-  const [message, setMessage] = useState("First");
+  const [count, setCount] = useState(0);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setMessage("Second");
-    }, 300);
-  }, []);
+  const handleIncrement = () => {
+    setCount(count + 1);
+  };
+
   return (
     <div>
-      <p className="primary-text">{message}</p>
+      <h1>{count}</h1>
+      <button onClick={handleIncrement}>Increment</button>
     </div>
   );
 }
 
 it("should render the third test correctly", async () => {
-  const { container } = render(<TestComponent />);
-  // const elementExist = await screen.findByText(/Second/i);
-  // const elementShouldNotExist = screen.queryByText("First");
-  // expect(elementExist).toBeInTheDocument();
-  // expect(elementShouldNotExist).not.toBeInTheDocument();
+  const user = userEvent.setup();
+  render(<TestComponent />);
+  await user.pointer({
+    keys: "[MouseLeft]",
+    target: screen.getByRole("button", { name: "Increment" }),
+  });
 
-  const element = container.querySelector(".primary-text");
+  const headingElement = await screen.findByRole("heading");
 
-  expect(element).toBeInTheDocument();
+  expect(headingElement).toHaveTextContent("1");
 });
