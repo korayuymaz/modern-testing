@@ -1,14 +1,23 @@
+import React from "react";
+import { useFetch } from "./useFetch.js";
+
 function App() {
+  const { data, isLoading } = useFetch(
+    "https://jsonplaceholder.typicode.com/posts"
+  );
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
   return (
-    <div className="App">
-      <p>Modern Testing</p>
-      <button>Button</button>
-      <ul>
-        <li>Test 1</li>
-        <li>Test 2</li>
-        <li>Test 3</li>
-      </ul>
-    </div>
+    <ul>
+      {data.map((post) => (
+        <li key={post.id}>
+          <p>{post.title}</p>
+        </li>
+      ))}
+    </ul>
   );
 }
 
