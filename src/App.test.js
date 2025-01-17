@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { render, screen } from "@testing-library/react";
+import { waitFor, render, screen } from "@testing-library/react";
 
-function TestComponentAsync() {
-  const [message, setMessage] = useState("First Message");
+function TestComponent() {
+  const [message, setMessage] = useState("First");
 
   useEffect(() => {
     setTimeout(() => {
-      setMessage("Second Message");
+      setMessage("Second");
     }, [300]);
   }, []);
   return (
@@ -16,8 +16,17 @@ function TestComponentAsync() {
   );
 }
 
-it("should render the second message correctly", async () => {
-  render(<TestComponentAsync />);
-  const element = await screen.findByText(/Second/i);
-  expect(element).toBeInTheDocument();
+it("should render the third test correctly", async () => {
+  render(<TestComponent />);
+  // Instead of using findByText and queryByText, we can use waitFor
+  // const elementExist = await screen.findByText(/Second/i);
+  // const elementShouldNotExist = screen.queryByText("First");
+  // expect(elementExist).toBeInTheDocument();
+  // expect(elementShouldNotExist).not.toBeInTheDocument();
+  await waitFor(() => {
+    expect(screen.getByText("Second")).toBeInTheDocument();
+  });
+  await waitFor(() => {
+    expect(screen.queryByText("First")).not.toBeInTheDocument();
+  });
 });
