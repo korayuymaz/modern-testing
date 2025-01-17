@@ -17,7 +17,7 @@ function TestComponent() {
   );
 }
 
-it("should render the third test correctly", async () => {
+it("should render the correct number after user event", async () => {
   const user = userEvent.setup();
   render(<TestComponent />);
   await user.pointer({
