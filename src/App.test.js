@@ -16,7 +16,7 @@ function TestComponent() {
   );
 }
 
-it("should render the third test correctly", async () => {
+it("should render the text inside the setMessage", async () => {
   render(<TestComponent />);
   // Instead of using findByText and queryByText, we can use waitFor
   // const elementExist = await screen.findByText(/Second/i);
