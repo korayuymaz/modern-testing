@@ -8,7 +8,7 @@ function useCustomHook() {
   return { name, changeName };
 }
 
-it("should render TestComponent", async () => {
+it("should return correctly before and after calling hook function", async () => {
   const { result } = renderHook(useCustomHook);
 
   expect(result.current.name).toBe("John Doe");
